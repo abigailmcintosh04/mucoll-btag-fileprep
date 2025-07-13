@@ -49,3 +49,31 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
     jet_data['is_matched'] = ak.flatten(jet_is_matched)
 
     return jet_data
+
+def convert_consts_to_numpy(track_valid, track_charge, track_d0):
+    """
+    Convert consts data from an awkward array to a structured numpy array.
+
+    Parameters
+    ----------
+    track_valid : awkward.Array
+        The track is real and not a dummy filler.
+    track_charge : awkward.Array
+        Track charge.
+    track_d0 : awkward.Array
+        Track d0.
+
+    Returns
+    -------
+    numpy.ndarray
+        A structured numpy array with consts information.
+    """
+
+    ntracks = ak.count(track_valid)
+
+    consts_data = np.empty(ntracks, dtype=schema.dtype_consts)
+    consts_data['valid'] = ak.flatten(track_valid)
+    consts_data['charge'] = ak.flatten(track_charge)
+    consts_data['d0'] = ak.flatten(track_d0)
+
+    return consts_data

@@ -7,6 +7,7 @@ import argparse
 from ucbtagfileprep import kinematics
 from ucbtagfileprep import convert
 from ucbtagfileprep import match
+from ucbtagfileprep import tracks
 
 import uproot
 import h5py
@@ -72,9 +73,16 @@ BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'] = match.match_jets_to
     mc_pdgid=showerData['mcPDGID']
 )
 
+#
+# Handle the tracks
+BUVertices['daughters_trackQ'] = tracks.charge(BUVertices['daughters_trackOmega'])
+BUVertices['daughters_trackTheta'] = tracks.theta(BUVertices['daughters_trackTanLambda'])
+BUVertices['daughters_trackPt'] = tracks.pt(BUVertices['daughters_trackOmega'])
+BUVertices['daughters_trackEta'] = tracks.eta(BUVertices['daughters_trackTheta'])
+BUVertices['daughters_trackValid'] = tracks.valid(BUVertices['daughters_trackOmega'])
 
 #
-# Prepare the output structures
+# Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
     jet_pt=BUVertices['jmot'],
     jet_eta=BUVertices['jeta'],
@@ -84,6 +92,13 @@ jets = convert.convert_jets_to_numpy(
     jet_flavour=BUVertices['jflv'],
     jet_dr=BUVertices['jmdr'],
     jet_is_matched=BUVertices['jism']
+)
+
+print(dir(BUVertices))
+consts = convert.convert_consts_to_numpy(
+    track_valid=BUVertices['daughters_trackValid'],
+    track_charge=BUVertices['daughters_trackQ'],
+    track_d0=BUVertices['daughters_trackD0']
 )
 
 #

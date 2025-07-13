@@ -12,3 +12,10 @@ dtype_jets = np.dtype([
     ("dr", np.float32),
     ("is_matched", np.bool_),
 ])
+
+# Dataset 'consts'
+dtype_consts = np.dtype([
+    ("valid", np.bool_),
+    ("charge", np.int32),
+    ("d0", np.float32),
+])
