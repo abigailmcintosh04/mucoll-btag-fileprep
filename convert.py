@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
 # %% Important imports
-import uproot
 
 import argparse
 
 from ucbtagfileprep import kinematics
+from ucbtagfileprep import convert
+from ucbtagfileprep import match
+
+import uproot
+import h5py
+import awkward as ak
 
 # %% Input argument parsing
 parser = argparse.ArgumentParser()
@@ -20,14 +25,69 @@ output_path = args.output_file
 # %% Read the input file
 fh_in=uproot.open(input_path)
 
+#
+# Read the reconstructed jets
+
 # Uproot can only load certain branches. Not clear why.
 keys=fh_in['BUVertices'].keys()
 keys.remove('evpro')
 BUVertices=fh_in['BUVertices'].arrays(keys)
 
-print(BUVertices)
+# Calculate jet kinematics
+BUVertices['jmot'] = kinematics.pt   (BUVertices['jmox'], BUVertices['jmoy'])
+BUVertices['jphi'] = kinematics.phi  (BUVertices['jmox'], BUVertices['jmoy'])
+BUVertices['jthe'] = kinematics.theta(BUVertices['jmot'], BUVertices['jmoz'])
+BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
 
-# %% Calculate jet kinematics
-BUVertices['jmot'],BUVertices['jeta'],BUVertices['jphi'] = \
-    kinematics.ptetaphi(BUVertices['jmox'],BUVertices['jmoy'],BUVertices['jmoz'])
+#
+# Read the truth particles
 
+showerData = fh_in["showerData"]
+
+# List required branches
+branchsuffixes = ["mcPDGID", "mcE", "mcPx", "mcPy", "mcPz"]
+branches = [f'd1_{suffix}' for suffix in branchsuffixes]
+branches += [f'd2_{suffix}' for suffix in branchsuffixes]
+
+# Read only the specified event range
+showerData = showerData.arrays(branches)
+
+# Unflatten the data
+showerData = ak.unflatten(showerData, counts=1)
+showerData = ak.Array({suffix : ak.concatenate([showerData[f'd1_{suffix}'], showerData[f'd2_{suffix}']], axis=1) for suffix in branchsuffixes})
+
+# Calculate truth particle kinematics
+showerData['mcPt'] = kinematics.pt(showerData['mcPx'], showerData['mcPy'])
+showerData['mcPhi'] = kinematics.phi(showerData['mcPx'], showerData['mcPy'])
+showerData['mcTheta'] = kinematics.theta(showerData['mcPt'], showerData['mcPz'])
+showerData['mcEta'] = kinematics.eta(showerData['mcTheta'])
+
+#
+# Match the jets to the truth particles
+BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'] = match.match_jets_to_quarks(
+    jet_eta=BUVertices['jeta'],
+    jet_phi=BUVertices['jphi'],
+    mc_eta=showerData['mcEta'],
+    mc_phi=showerData['mcPhi'],
+    mc_pdgid=showerData['mcPDGID']
+)
+
+
+#
+# Prepare the output structures
+jets = convert.convert_jets_to_numpy(
+    jet_pt=BUVertices['jmot'],
+    jet_eta=BUVertices['jeta'],
+    jet_phi=BUVertices['jphi'],
+    jet_energy=BUVertices['jene'],
+    jet_mass=BUVertices['jmas'],
+    jet_flavour=BUVertices['jflv'],
+    jet_dr=BUVertices['jmdr'],
+    jet_is_matched=BUVertices['jism']
+)
+
+#
+# Save to an H5 file
+
+with h5py.File(output_path, 'w') as fh_out:
+    fh_out.create_dataset('jets', data=jets)
