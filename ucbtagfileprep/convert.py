@@ -69,11 +69,12 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0):
         A structured numpy array with consts information.
     """
 
-    ntracks = ak.count(track_valid)
+    # Save the arrays
+    ntracks = np.sum(ak.num(track_valid, axis=1))
 
-    consts_data = np.empty(ntracks, dtype=schema.dtype_consts)
-    consts_data['valid'] = ak.flatten(track_valid)
-    consts_data['charge'] = ak.flatten(track_charge)
-    consts_data['d0'] = ak.flatten(track_d0)
+    consts_data = np.empty((ntracks, 200), dtype=schema.dtype_consts)
+    consts_data['valid'] = ak.flatten(track_valid, axis=1)
+    consts_data['charge'] = ak.flatten(track_charge, axis=1)
+    consts_data['d0'] = ak.flatten(track_d0, axis=1)
 
     return consts_data

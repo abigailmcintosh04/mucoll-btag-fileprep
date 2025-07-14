@@ -94,7 +94,6 @@ jets = convert.convert_jets_to_numpy(
     jet_is_matched=BUVertices['jism']
 )
 
-print(dir(BUVertices))
 consts = convert.convert_consts_to_numpy(
     track_valid=BUVertices['daughters_trackValid'],
     track_charge=BUVertices['daughters_trackQ'],
@@ -106,3 +105,4 @@ consts = convert.convert_consts_to_numpy(
 
 with h5py.File(output_path, 'w') as fh_out:
     fh_out.create_dataset('jets', data=jets)
+    fh_out.create_dataset('consts', data=consts)
