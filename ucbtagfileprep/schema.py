@@ -18,4 +18,5 @@ dtype_consts = np.dtype([
     ("valid", np.bool_),
     ("charge", np.int32),
     ("d0", np.float32),
+    ('eta', np.float32),
 ])
