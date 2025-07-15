@@ -86,3 +86,12 @@ def valid(omega):
         Boolean array indicating if the track is valid (omega != 0).
     """
     return omega != 0
+
+def rel_ang(track, jet):
+    return track - jet
+
+def frac_pt(track, jet):
+    return track / jet
+
+def dr(rel_phi, rel_eta):
+    return np.sqrt(np.power(rel_phi, 2) + np.power(rel_eta, 2))
