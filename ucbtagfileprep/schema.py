@@ -25,4 +25,5 @@ dtype_consts = np.dtype([
     ('frac_pt', np.float32),
     ('dr', np.float32),
     ('z0', np.float32),
+    ('signed_2d_ip', np.float32),
 ])

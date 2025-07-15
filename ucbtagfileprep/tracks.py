@@ -87,11 +87,8 @@ def valid(omega):
     """
     return omega != 0
 
-def rel_ang(track, jet):
-    return track - jet
-
-def frac_pt(track, jet):
-    return track / jet
-
 def dr(rel_phi, rel_eta):
     return np.sqrt(np.power(rel_phi, 2) + np.power(rel_eta, 2))
+
+def twodip(d_0, sintheta):
+    return (d_0 * sintheta) / np.abs(d_0 * sintheta)

@@ -80,10 +80,11 @@ BUVertices['daughters_trackTheta'] = tracks.theta(BUVertices['daughters_trackTan
 BUVertices['daughters_trackPt'] = tracks.pt(BUVertices['daughters_trackOmega'])
 BUVertices['daughters_trackEta'] = tracks.eta(BUVertices['daughters_trackTheta'])
 BUVertices['daughters_trackValid'] = tracks.valid(BUVertices['daughters_trackOmega'])
-BUVertices['daughters_trackRelEta'] = tracks.rel_ang(BUVertices['daughters_trackEta'], BUVertices['jeta'])
-BUVertices['daughters_trackRelPhi'] = tracks.rel_ang(BUVertices['daughters_trackPhi'], BUVertices['jphi'])
-BUVertices['daughters_trackFracPt'] = tracks.frac_pt(BUVertices['daughters_trackPt'], BUVertices['jmot'])
+BUVertices['daughters_trackRelEta'] = BUVertices['daughters_trackEta'] - BUVertices['jeta']
+BUVertices['daughters_trackRelPhi'] = BUVertices['daughters_trackPhi'] - BUVertices['jphi']
+BUVertices['daughters_trackFracPt'] = BUVertices['daughters_trackPt'] / BUVertices['jmot']
 BUVertices['daughters_trackdR'] = tracks.dr(BUVertices['daughters_trackRelPhi'], BUVertices['daughters_trackRelEta'])
+BUVertices['daughters_track2DIP'] = tracks.twodip(BUVertices['daughters_trackD0'], BUVertices['daughters_track'])
 
 #
 # Prepare the jets output structures
@@ -109,6 +110,7 @@ consts = convert.convert_consts_to_numpy(
     track_frac_pt = BUVertices['daughters_trackFracPt'],
     track_dr = BUVertices['daughters_trackdR'],
     track_z0 = BUVertices['daughters_trackZ0'],
+    track_signed_2d_ip=BUVertices['daughters_track2DIP']
 )
 
 #
