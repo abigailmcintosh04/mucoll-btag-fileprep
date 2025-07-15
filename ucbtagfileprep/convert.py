@@ -50,7 +50,7 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
 
     return jet_data
 
-def convert_consts_to_numpy(track_valid, track_charge, track_d0):
+def convert_consts_to_numpy(track_valid, track_charge, track_phi_rel, track_eta_rel, track_d0):
     """
     Convert consts data from an awkward array to a structured numpy array.
 
@@ -75,6 +75,8 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0):
     consts_data = np.empty((ntracks, 200), dtype=schema.dtype_consts)
     consts_data['valid'] = ak.flatten(track_valid, axis=1)
     consts_data['charge'] = ak.flatten(track_charge, axis=1)
+    consts_data['phi_rel'] = ak.flatten(track_phi_rel, axis=1)
+    consts_data['eta_rel'] = ak.flatten(track_eta_rel, axis=1)
     consts_data['d0'] = ak.flatten(track_d0, axis=1)
 
     return consts_data
