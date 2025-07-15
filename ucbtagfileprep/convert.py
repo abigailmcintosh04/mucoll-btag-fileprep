@@ -2,9 +2,13 @@ import awkward as ak
 import numpy as np
 
 from ucbtagfileprep import schema
+from ucbtagfileprep import utils
+
+
+flavour_labels_lut = utils.prepare_lut({1:0, 2:0, 3:0, 4:1 ,5:2})
 
 def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
-                          jet_flavour, jet_dr, jet_is_matched, jet_flavour_label=None):
+                          jet_flavour, jet_dr, jet_is_matched):
     """
     Convert jets data from an awkward array to a structured numpy array.
 
@@ -26,8 +30,6 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
         Jet distance in delta R.
     jet_is_matched : awkward.Array
         Boolean array indicating if jet is matched to truth particle.
-    jet_flavour_label : awkward.Array, optional
-        Jet flavour label.
 
     Returns
     -------
@@ -44,7 +46,7 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
     jet_data['energy'] = ak.flatten(jet_energy)
     jet_data['mass'] = ak.flatten(jet_mass)
     jet_data['flavour'] = ak.flatten(jet_flavour)
-    #jet_data['flavour_label'] = ak.flatten(jet_flavour_label) if jet_flavour_label is not None else np.zeros(njet, dtype=np.int32)
+    jet_data['flavour_label'] = flavour_labels_lut[jet_data['flavour']]
     jet_data['dr'] = ak.flatten(jet_dr)
     jet_data['is_matched'] = ak.flatten(jet_is_matched)
 
