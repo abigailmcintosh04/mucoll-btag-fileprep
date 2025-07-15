@@ -82,7 +82,7 @@ BUVertices['daughters_trackEta'] = tracks.eta(BUVertices['daughters_trackTheta']
 BUVertices['daughters_trackValid'] = tracks.valid(BUVertices['daughters_trackOmega'])
 BUVertices['daughters_trackRelEta'] = tracks.rel_ang(BUVertices['daughters_trackEta'], BUVertices['jeta'])
 BUVertices['daughters_trackRelPhi'] = tracks.rel_ang(BUVertices['daughters_trackPhi'], BUVertices['jphi'])
-BUVertices['daughters_trackFracPt'] = tracks.frac_pt(BUVertices['jmot'], BUVertices['daughters_trackPt'])
+BUVertices['daughters_trackFracPt'] = tracks.frac_pt(BUVertices['daughters_trackPt'], BUVertices['jmot'])
 BUVertices['daughters_trackdR'] = tracks.dr(BUVertices['daughters_trackRelPhi'], BUVertices['daughters_trackRelEta'])
 
 #
