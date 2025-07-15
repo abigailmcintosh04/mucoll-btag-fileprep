@@ -81,9 +81,8 @@ BUVertices['daughters_trackPt'] = tracks.pt(BUVertices['daughters_trackOmega'])
 BUVertices['daughters_trackEta'] = tracks.eta(BUVertices['daughters_trackTheta'])
 BUVertices['daughters_trackValid'] = tracks.valid(BUVertices['daughters_trackOmega'])
 
-BUVertices['daughters_trackPhiRel']=BUVertices['daughters_trackPhi']-BUVertices['jphi']
-BUVertices['daughters_trackEtaRel']=BUVertices['daughters_trackEta']-BUVertices['jeta']
-
+BUVertices['daughters_trackPhiRel']=tracks.phi_rel(BUVertices['jphi'], BUVertices['daughters_trackPhi'], BUVertices['daughters_trackValid'])
+BUVertices['daughters_trackEtaRel']=tracks.eta_rel(BUVertices['jeta'], BUVertices['daughters_trackEta'], BUVertices['daughters_trackValid'])
 
 #
 # Prepare the jets output structures
