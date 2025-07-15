@@ -17,6 +17,8 @@ dtype_jets = np.dtype([
 dtype_consts = np.dtype([
     ("valid", np.bool_),
     ("charge", np.int32),
+    ("phi_rel", np.float32),
+    ("eta_rel", np.float32),
     ("d0", np.float32),
     ('eta', np.float32),
     ('phi', np.float32),
