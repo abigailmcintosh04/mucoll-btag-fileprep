@@ -1,8 +1,6 @@
 import numpy as np
 import awkward as ak
 
-from . import kinematics
-
 def charge(omega):
     """
     Calculate the charge of a track from its omega parameter.

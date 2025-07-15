@@ -76,8 +76,6 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0, track_eta, trac
     consts_data = np.empty((ntracks, 200), dtype=schema.dtype_consts)
     consts_data['valid'] = ak.flatten(track_valid, axis=1)
     consts_data['charge'] = ak.flatten(track_charge, axis=1)
-    consts_data['phi_rel'] = ak.flatten(track_phi_rel, axis=1)
-    consts_data['eta_rel'] = ak.flatten(track_eta_rel, axis=1)
     consts_data['d0'] = ak.flatten(track_d0, axis=1)
     consts_data['eta'] = ak.flatten(track_eta, axis=1)
     consts_data['phi'] = ak.flatten(track_phi, axis=1)
