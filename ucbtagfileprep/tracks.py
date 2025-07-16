@@ -1,6 +1,6 @@
 import numpy as np
 import awkward as ak
-import kinematics
+from ucbtagfileprep import kinematics
 
 def charge(omega):
     """
