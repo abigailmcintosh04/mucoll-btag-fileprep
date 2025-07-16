@@ -1,7 +1,6 @@
 import numpy as np
 import awkward as ak
-
-from . import kinematics
+from ucbtagfileprep import kinematics
 
 def charge(omega):
     """
@@ -99,3 +98,13 @@ def eta_rel(jet_eta, track_eta, track_valid):
     track_eta_rel = ak.where(track_valid, jet_eta-track_eta, 0)
 
     return track_eta_rel
+
+def deltaR(phi_rel, eta_rel):
+    return np.hypot(phi_rel, eta_rel)
+
+def signed_2d_ip(d_0, sigma_d_0, eta_rel, track_valid):
+    sign = np.sign(d_0 * np.sin(eta_rel))
+    signed_ip = sign * np.abs(d_0 / sigma_d_0)
+    signed_ip = ak.where(track_valid, signed_ip, 0)
+    return signed_ip
+    
