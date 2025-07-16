@@ -46,7 +46,7 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
     jet_data['energy'] = ak.flatten(jet_energy)
     jet_data['mass'] = ak.flatten(jet_mass)
     jet_data['flavour'] = ak.flatten(jet_flavour)
-    jet_data['flavour_label'] = flavour_labels_lut[jet_data['flavour']]
+    jet_data['flavour_label'] = flavour_label_lut[jet_data['flavour']]
     jet_data['dr'] = ak.flatten(jet_dr)
     jet_data['is_matched'] = ak.flatten(jet_is_matched)
 
