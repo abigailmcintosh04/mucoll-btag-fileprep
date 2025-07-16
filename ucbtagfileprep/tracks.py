@@ -99,8 +99,8 @@ def eta_rel(jet_eta, track_eta, track_valid):
 
     return track_eta_rel
 
-def dr(phi_rel, eta_rel):
-    return np.sqrt(np.power(phi_rel, 2) + np.power(eta_rel, 2))
+def deltaR(phi_rel, eta_rel):
+    return np.hypot(phi_rel, eta_rel)
 
 def signed_2d_ip(d_0, sigma_d_0, eta_rel, track_valid):
     sign = np.sign(d_0 * np.sin(eta_rel))
