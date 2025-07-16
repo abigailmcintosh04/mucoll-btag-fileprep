@@ -102,5 +102,7 @@ def eta_rel(jet_eta, track_eta, track_valid):
 def dr(phi_rel, eta_rel):
     return np.sqrt(np.power(phi_rel, 2) + np.power(eta_rel, 2))
 
-def twodip(d_0, sintheta):
-    return (d_0 * sintheta) / np.abs(d_0 * sintheta)
+def signed_2d_ip(d_0, sigma_d_0, eta_rel):
+    sign = np.sign(d_0 * np.sin(eta_rel))
+    return sign * np.abs(d_0 / sigma_d_0)
+    
