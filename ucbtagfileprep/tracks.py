@@ -1,5 +1,6 @@
 import numpy as np
 import awkward as ak
+import kinematics
 
 def charge(omega):
     """
@@ -86,6 +87,17 @@ def valid(omega):
         Boolean array indicating if the track is valid (omega != 0).
     """
     return omega != 0
+
+def phi_rel(jet_phi, track_phi, track_valid):
+    track_phi_rel = kinematics.delta_phi(track_phi, jet_phi)
+    track_phi_rel = ak.where(track_valid, track_phi_rel, 0)
+
+    return track_phi_rel
+
+def eta_rel(jet_eta, track_eta, track_valid):
+    track_eta_rel = ak.where(track_valid, jet_eta-track_eta, 0)
+
+    return track_eta_rel
 
 def dr(phi_rel, eta_rel):
     return np.sqrt(np.power(phi_rel, 2) + np.power(eta_rel, 2))
