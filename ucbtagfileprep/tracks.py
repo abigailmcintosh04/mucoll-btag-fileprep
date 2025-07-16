@@ -87,8 +87,8 @@ def valid(omega):
     """
     return omega != 0
 
-def dr(rel_phi, rel_eta):
-    return np.sqrt(np.power(rel_phi, 2) + np.power(rel_eta, 2))
+def dr(phi_rel, eta_rel):
+    return np.sqrt(np.power(phi_rel, 2) + np.power(eta_rel, 2))
 
 def twodip(d_0, sintheta):
     return (d_0 * sintheta) / np.abs(d_0 * sintheta)
