@@ -5,7 +5,7 @@ from ucbtagfileprep import schema
 from ucbtagfileprep import utils
 
 
-flavour_labels_lut = utils.prepare_lut({1:0, 2:0, 3:0, 4:1 ,5:2})
+flavour_labels_lut = utils.prepare_lut({1:0, 2:0, 3:0, 4:1, 5:2})
 
 def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
                           jet_flavour, jet_dr, jet_is_matched):
