@@ -84,7 +84,7 @@ BUVertices['daughters_trackPhiRel'] = tracks.phi_rel(BUVertices['jphi'], BUVerti
 BUVertices['daughters_trackEtaRel'] = tracks.eta_rel(BUVertices['jeta'], BUVertices['daughters_trackEta'], BUVertices['daughters_trackValid'])
 BUVertices['daughters_trackFracPt'] = BUVertices['daughters_trackPt'] / BUVertices['jmot']
 BUVertices['daughters_trackdR'] = tracks.dr(BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackEtaRel'])
-BUVertices['daughters_track2DIP'] = tracks.signed_2d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackEtaRel'])
+BUVertices['daughters_track2DIP'] = tracks.signed_2d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackEtaRel'], BUVertices['daughters_trackValid'])
 
 #
 # Prepare the jets output structures

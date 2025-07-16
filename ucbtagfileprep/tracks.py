@@ -102,7 +102,9 @@ def eta_rel(jet_eta, track_eta, track_valid):
 def dr(phi_rel, eta_rel):
     return np.sqrt(np.power(phi_rel, 2) + np.power(eta_rel, 2))
 
-def signed_2d_ip(d_0, sigma_d_0, eta_rel):
+def signed_2d_ip(d_0, sigma_d_0, eta_rel, track_valid):
     sign = np.sign(d_0 * np.sin(eta_rel))
-    return sign * np.abs(d_0 / sigma_d_0)
+    signed_ip = sign * np.abs(d_0 / sigma_d_0)
+    signed_ip = ak.where(track_valid, signed_ip, 0)
+    return signed_ip
     
