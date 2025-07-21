@@ -1,0 +1,15 @@
+setup.cfg
+setup.py
+mucbtagfileprep.egg-info/PKG-INFO
+mucbtagfileprep.egg-info/SOURCES.txt
+mucbtagfileprep.egg-info/dependency_links.txt
+mucbtagfileprep.egg-info/requires.txt
+mucbtagfileprep.egg-info/top_level.txt
+ucbtagfileprep/__init__.py
+ucbtagfileprep/config.py
+ucbtagfileprep/convert.py
+ucbtagfileprep/kinematics.py
+ucbtagfileprep/match.py
+ucbtagfileprep/schema.py
+ucbtagfileprep/tracks.py
+ucbtagfileprep/utils.py

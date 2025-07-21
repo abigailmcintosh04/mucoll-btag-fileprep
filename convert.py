@@ -33,6 +33,7 @@ fh_in=uproot.open(input_path)
 # Uproot can only load certain branches. Not clear why.
 keys=fh_in['BUVertices'].keys()
 keys.remove('evpro')
+keys.remove('vttyp')
 BUVertices=fh_in['BUVertices'].arrays(keys)
 
 # Calculate jet kinematics
