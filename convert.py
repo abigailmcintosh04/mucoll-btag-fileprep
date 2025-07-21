@@ -87,6 +87,7 @@ BUVertices['daughters_trackEtaRel'] = tracks.eta_rel(BUVertices['jeta'], BUVerti
 BUVertices['daughters_trackPtFrac'] = BUVertices['daughters_trackPt'] / BUVertices['jmot']
 BUVertices['daughters_trackdR'] = tracks.deltaR(BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackEtaRel'])
 BUVertices['daughters_track2DIP'] = tracks.signed_2d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
+BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackZ0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackSigmaZ0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
 
 #
 # Prepare the jets output structures
@@ -112,7 +113,8 @@ consts = convert.convert_consts_to_numpy(
     track_pt_frac = BUVertices['daughters_trackPtFrac'],
     track_dr = BUVertices['daughters_trackdR'],
     track_z0 = BUVertices['daughters_trackZ0'],
-    track_signed_2d_ip=BUVertices['daughters_track2DIP']
+    track_signed_2d_ip = BUVertices['daughters_track2DIP'],
+    track_signed_3d_ip = BUVertices['daughters_track3DIP'],
 )
 
 #

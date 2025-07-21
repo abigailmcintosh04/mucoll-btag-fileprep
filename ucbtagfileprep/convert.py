@@ -53,7 +53,7 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
     return jet_data
 
 def convert_consts_to_numpy(track_valid, track_charge, track_d0, track_eta, track_phi, track_eta_rel, 
-                            track_phi_rel, track_pt_frac, track_dr, track_z0, track_signed_2d_ip):
+                            track_phi_rel, track_pt_frac, track_dr, track_z0, track_signed_2d_ip, track_signed_3d_ip):
     """
     Convert consts data from an awkward array to a structured numpy array.
 
@@ -87,5 +87,6 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0, track_eta, trac
     consts_data['dr'] = ak.flatten(track_dr, axis=1)
     consts_data['z0'] = ak.flatten(track_z0, axis=1)
     consts_data['signed_2d_ip'] = ak.flatten(track_signed_2d_ip, axis=1)
+    consts_data['signed_3d_ip'] = ak.flatten(track_signed_3d_ip, axis=1)
     
     return consts_data
