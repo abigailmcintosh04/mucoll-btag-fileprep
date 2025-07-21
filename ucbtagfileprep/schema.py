@@ -22,7 +22,7 @@ dtype_consts = np.dtype([
     ('phi', np.float32),
     ('eta_rel', np.float32),
     ('phi_rel', np.float32),
-    ('frac_pt', np.float32),
+    ('pt_frac', np.float32),
     ('dr', np.float32),
     ('z0', np.float32),
     ('signed_2d_ip', np.float32),
