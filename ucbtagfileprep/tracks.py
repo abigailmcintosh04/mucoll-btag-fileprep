@@ -102,8 +102,8 @@ def eta_rel(jet_eta, track_eta, track_valid):
 def deltaR(phi_rel, eta_rel):
     return np.hypot(phi_rel, eta_rel)
 
-def signed_2d_ip(d_0, sigma_d_0, eta_rel, track_valid):
-    sign = np.sign(d_0 * np.sin(eta_rel))
+def signed_2d_ip(d_0, sigma_d_0, phi_rel, track_valid):
+    sign = np.sign(d_0 * np.sin(phi_rel))
     signed_ip = sign * np.abs(d_0 / sigma_d_0)
     signed_ip = ak.where(track_valid, signed_ip, 0)
     return signed_ip
