@@ -12,6 +12,7 @@ from ucbtagfileprep import tracks
 import uproot
 import h5py
 import awkward as ak
+import numpy as np
 
 # Input argument parsing
 parser = argparse.ArgumentParser()
@@ -119,3 +120,5 @@ consts = convert.convert_consts_to_numpy(
 with h5py.File(output_path, 'w') as fh_out:
     fh_out.create_dataset('jets', data=jets)
     fh_out.create_dataset('consts', data=consts)
+
+    fh_out['jets'].attrs['flavour_label'] = np.array(['ujets', 'cjets', 'bjets'], dtype=object)
