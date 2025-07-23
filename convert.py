@@ -75,6 +75,9 @@ BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'] = match.match_jets_to
     mc_pdgid=showerData['mcPDGID']
 )
 
+valid_mask = showerData['jism'] == True
+showerData['mcPt'] = showerData['mcPt'][valid_mask]
+
 #
 # Handle the tracks
 BUVertices['daughters_trackQ'] = tracks.charge(BUVertices['daughters_trackOmega'])
@@ -92,7 +95,7 @@ BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_tr
 #
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
-    truth_pt = showerData['mcPt'],
+    jet_truth_pt = showerData['mcPt'],
     jet_pt = BUVertices['jmot'],
     jet_eta = BUVertices['jeta'],
     jet_phi = BUVertices['jphi'],
