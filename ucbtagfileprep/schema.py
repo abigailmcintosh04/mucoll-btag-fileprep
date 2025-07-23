@@ -2,6 +2,7 @@ import numpy as np
 
 # Dataset 'jets'
 dtype_jets = np.dtype([
+    ('truth_pt', np.float32),
     ("pt", np.float32),
     ("eta", np.float32),
     ("phi", np.float32),

@@ -7,7 +7,7 @@ from ucbtagfileprep import utils
 
 flavour_labels_lut = utils.prepare_lut({1:0, 2:0, 3:0, 4:1, 5:2})
 
-def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
+def convert_jets_to_numpy(jet_truth_pt, jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
                           jet_flavour, jet_dr, jet_is_matched):
     """
     Convert jets data from an awkward array to a structured numpy array.
@@ -40,6 +40,7 @@ def convert_jets_to_numpy(jet_pt, jet_eta, jet_phi, jet_energy, jet_mass,
     njet=ak.count(jet_pt)
 
     jet_data = np.empty(njet, dtype=schema.dtype_jets)
+    jet_data['truth_pt'] = ak.flatten(jet_truth_pt)
     jet_data['pt'] = ak.flatten(jet_pt)
     jet_data['eta'] = ak.flatten(jet_eta)
     jet_data['phi'] = ak.flatten(jet_phi)

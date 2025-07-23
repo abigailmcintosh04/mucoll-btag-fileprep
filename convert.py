@@ -92,6 +92,7 @@ BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_tr
 #
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
+    truth_pt = showerData['mcPt'],
     jet_pt = BUVertices['jmot'],
     jet_eta = BUVertices['jeta'],
     jet_phi = BUVertices['jphi'],
