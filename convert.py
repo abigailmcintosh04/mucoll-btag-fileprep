@@ -75,7 +75,7 @@ BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'] = match.match_jets_to
     mc_pdgid=showerData['mcPDGID']
 )
 
-valid_mask = showerData['jism'] == True
+valid_mask = BUVertices['jism'] == True
 showerData['mcPt'] = showerData['mcPt'][valid_mask]
 
 #
