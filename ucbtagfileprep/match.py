@@ -34,6 +34,8 @@ def match_obj1_to_obj2(
     # Unflatten the last axis to match the indices with showerData
     bestMatch=ak.flatten(bestMatch, axis=-1)
 
+    # print(bestMatch[3:6].tolist())
+
     return bestMatch, bestdR
 
 def match_jets_to_quarks(jet_eta, jet_phi,
@@ -68,6 +70,9 @@ def match_jets_to_quarks(jet_eta, jet_phi,
     """
     bestMatch, bestdR = match_obj1_to_obj2(jet_eta, jet_phi, mc_eta, mc_phi)
 
+    # print(bestdR)
+    # print(bestMatch)
+
     # Check if the match is within the dR threshold
     jet_ismatched = bestdR < dr_threshold
 
@@ -77,4 +82,6 @@ def match_jets_to_quarks(jet_eta, jet_phi,
     # Set dR to a large value for unmatched jets
     jet_mcdr = ak.where(jet_ismatched, bestdR, 999.0)
 
-    return jet_flavour, jet_mcdr, jet_ismatched
+    # print(jet_flavour, jet_mcdr, jet_ismatched)
+
+    return jet_flavour, jet_mcdr, jet_ismatched, bestMatch

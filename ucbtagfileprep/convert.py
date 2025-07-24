@@ -40,6 +40,9 @@ def convert_jets_to_numpy(jet_truth_pt, jet_pt, jet_eta, jet_phi, jet_energy, je
     njet=ak.count(jet_pt)
 
     jet_data = np.empty(njet, dtype=schema.dtype_jets)
+    # print(jet_truth_pt[0:10].tolist())
+    # test = ak.flatten(jet_truth_pt)
+    # print(test)
     jet_data['truth_pt'] = ak.flatten(jet_truth_pt)
     jet_data['pt'] = ak.flatten(jet_pt)
     jet_data['eta'] = ak.flatten(jet_eta)
