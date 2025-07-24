@@ -1,3 +1,0 @@
-uproot
-h5py
-kkconfig
