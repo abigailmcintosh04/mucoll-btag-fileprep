@@ -29,15 +29,13 @@ fh_in=uproot.open(input_path)
 
 #
 # Read the reconstructed jets
-
 # Uproot can only load certain branches. Not clear why.
 keys=fh_in['BUVertices'].keys()
 keys.remove('evpro')
 keys.remove('vttyp')
 BUVertices=fh_in['BUVertices'].arrays(keys)
 
-# print(keys)
-
+#
 # Calculate jet kinematics
 BUVertices['jmot'] = kinematics.pt   (BUVertices['jmox'], BUVertices['jmoy'])
 BUVertices['jphi'] = kinematics.phi  (BUVertices['jmox'], BUVertices['jmoy'])
@@ -46,40 +44,29 @@ BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
 
 #
 # Read the truth particles
-
 showerData = fh_in["showerData"]
-# branches = showerData.arrays()
-# print(len(branches['d1_mcE']))
 
-
+#
 # List required branches
 branchsuffixes = ["mcPDGID", "mcE", "mcPx", "mcPy", "mcPz"]
 branches = [f'd1_{suffix}' for suffix in branchsuffixes]
 branches += [f'd2_{suffix}' for suffix in branchsuffixes]
 
+#
 # Read only the specified event range
 showerData = showerData.arrays(branches)
 
-# print(branches)
-
+#
 # Unflatten the data
 showerData = ak.unflatten(showerData, counts=1)
 showerData = ak.Array({suffix : ak.concatenate([showerData[f'd1_{suffix}'], showerData[f'd2_{suffix}']], axis=1) for suffix in branchsuffixes})
 
-
-# print(showerData['mcE'])
-
+#
 # Calculate truth particle kinematics
 showerData['mcPt'] = kinematics.pt(showerData['mcPx'], showerData['mcPy'])
 showerData['mcPhi'] = kinematics.phi(showerData['mcPx'], showerData['mcPy'])
 showerData['mcTheta'] = kinematics.theta(showerData['mcPt'], showerData['mcPz'])
 showerData['mcEta'] = kinematics.eta(showerData['mcTheta'])
-
-# print(showerData[4].tolist())
-
-# print(BUVertices[8].tolist())
-# print(BUVertices['jeta'][0:10].tolist())
-# print(BUVertices['jphi'][0:10].tolist())
 
 #
 # Match the jets to the truth particles
@@ -91,20 +78,9 @@ BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'], BUVertices['jbsm'] =
     mc_pdgid=showerData['mcPDGID']
 )
 
-# print(BUVertices['jbsm'][3:6].tolist())
-# print(showerData['mcPt'][3:6].tolist())
-# print(BUVertices['jmot'][3:6].tolist())
-# print('------------------------------')
-# truth_pt = showerData['mcPt'][BUVertices['jbsm']]
-# print(truth_pt[3:6].tolist())
-# delta_p = BUVertices['jmot'] - truth_pt
-# print(delta_p[3:6].tolist())
-# print(len(ak.flatten(delta_p, axis=None)))
-
-
-# print(len(ak.flatten(showerData['mcPt'], axis=None)))
+#
+# Selects matched truth jets based on indexing
 showerData['mcPt'] = showerData['mcPt'][BUVertices['jbsm']]
-# print(len(ak.flatten(showerData['mcPt'], axis=None)))
 
 #
 # Handle the tracks
@@ -120,10 +96,7 @@ BUVertices['daughters_trackdR'] = tracks.deltaR(BUVertices['daughters_trackPhiRe
 BUVertices['daughters_track2DIP'] = tracks.signed_2d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
 BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackZ0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackSigmaZ0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
 
-# print(showerData['mcPt'])
-# print(BUVertices['jism'][0:10].tolist())
-
-# #
+#
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
     jet_truth_pt = showerData['mcPt'],
