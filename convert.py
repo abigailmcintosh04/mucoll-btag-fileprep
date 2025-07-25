@@ -47,6 +47,16 @@ BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
 showerData = fh_in["showerData"]
 
 #
+# Read the truth jets
+keys = fh_in['TrueJets'].keys()
+keys.remove('evpro')
+TrueJets = fh_in['TrueJets'].arrays(keys)
+
+#
+# Calculate truth jet kinematics
+TrueJets['jmot'] = kinematics.pt(TrueJets['jmox'], TrueJets['jmoy'])
+
+#
 # List required branches
 branchsuffixes = ["mcPDGID", "mcE", "mcPx", "mcPy", "mcPz"]
 branches = [f'd1_{suffix}' for suffix in branchsuffixes]
@@ -80,7 +90,7 @@ BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'], BUVertices['jbsm'] =
 
 #
 # Selects matched truth jets based on indexing
-showerData['mcPt'] = showerData['mcPt'][BUVertices['jbsm']]
+TrueJets['jmot'] = TrueJets['jmot'][BUVertices['jbsm']]
 
 #
 # Handle the tracks
@@ -99,7 +109,8 @@ BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_tr
 #
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
-    jet_truth_pt = showerData['mcPt'],
+    # jet_truth_pt = showerData['mcPt'],
+    jet_truth_pt = TrueJets['jmot'],
     jet_pt = BUVertices['jmot'],
     jet_eta = BUVertices['jeta'],
     jet_phi = BUVertices['jphi'],
