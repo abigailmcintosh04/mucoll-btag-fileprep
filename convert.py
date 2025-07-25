@@ -80,17 +80,14 @@ showerData['mcEta'] = kinematics.eta(showerData['mcTheta'])
 
 #
 # Match the jets to the truth particles
-BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'], BUVertices['jbsm'] = match.match_jets_to_quarks(
+BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'], BUVertices['jtpt'] = match.match_jets_to_quarks(
     jet_eta=BUVertices['jeta'],
     jet_phi=BUVertices['jphi'],
     mc_eta=showerData['mcEta'],
     mc_phi=showerData['mcPhi'],
-    mc_pdgid=showerData['mcPDGID']
+    mc_pdgid=showerData['mcPDGID'],
+    mc_pt=TrueJets['jmot']
 )
-
-#
-# Selects matched truth jets based on indexing
-TrueJets['jmot'] = TrueJets['jmot'][BUVertices['jbsm']]
 
 #
 # Handle the tracks
@@ -109,8 +106,8 @@ BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_tr
 #
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
-    # jet_truth_pt = showerData['mcPt'],
-    jet_truth_pt = TrueJets['jmot'],
+    jet_truth_pt = BUVertices['jtpt'],
+    # jet_truth_pt = TrueJets['jmot'],
     jet_pt = BUVertices['jmot'],
     jet_eta = BUVertices['jeta'],
     jet_phi = BUVertices['jphi'],
