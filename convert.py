@@ -18,11 +18,13 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', type=str, help='Path to the input file')
 parser.add_argument('output_file', type=str, help='Path to the output file')
+parser.add_argument('shuffle', type=bool, help='Output file shuffled or not.')
 
 args = parser.parse_args()
 
 input_path = args.input_file
 output_path = args.output_file
+shuffle = args.shuffle
 
 # Read the input file
 fh_in=uproot.open(input_path)
@@ -137,7 +139,16 @@ consts = convert.convert_consts_to_numpy(
 # Save to an H5 file
 
 with h5py.File(output_path, 'w') as fh_out:
+    if shuffle:
+        valid_mask = jets['is_matched'] == True
+        valid_jets = jets[valid_mask]
+        length = len(valid_jets)
+        indices = np.arange(0, length, 1)
+        np.random.shuffle(indices)
+        shuffled_consts = consts[indices]
+        shuffled_jets = valid_jets[indices]
+        jets = shuffled_jets
+        consts = shuffled_consts
     fh_out.create_dataset('jets', data=jets)
     fh_out.create_dataset('consts', data=consts)
-
     fh_out['jets'].attrs['flavour_label'] = np.array(['ujets', 'cjets', 'bjets'], dtype=object)
