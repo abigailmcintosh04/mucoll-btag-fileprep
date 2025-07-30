@@ -38,13 +38,6 @@ keys.remove('vttyp')
 BUVertices=fh_in['BUVertices'].arrays(keys)
 
 #
-# Calculate jet kinematics
-BUVertices['jmot'] = kinematics.pt   (BUVertices['jmox'], BUVertices['jmoy'])
-BUVertices['jphi'] = kinematics.phi  (BUVertices['jmox'], BUVertices['jmoy'])
-BUVertices['jthe'] = kinematics.theta(BUVertices['jmot'], BUVertices['jmoz'])
-BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
-
-#
 # Read the truth particles
 showerData = fh_in["showerData"]
 
@@ -53,6 +46,13 @@ showerData = fh_in["showerData"]
 keys = fh_in['TrueJets'].keys()
 keys.remove('evpro')
 TrueJets = fh_in['TrueJets'].arrays(keys)
+
+#
+# Calculate jet kinematics
+BUVertices['jmot'] = kinematics.pt   (BUVertices['jmox'], BUVertices['jmoy'])
+BUVertices['jphi'] = kinematics.phi  (BUVertices['jmox'], BUVertices['jmoy'])
+BUVertices['jthe'] = kinematics.theta(BUVertices['jmot'], BUVertices['jmoz'])
+BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
 
 #
 # Calculate truth jet kinematics
