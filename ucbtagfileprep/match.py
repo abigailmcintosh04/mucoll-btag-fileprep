@@ -36,7 +36,7 @@ def match_obj1_to_obj2(
 
     return bestMatch, bestdR
 
-def match_jets_to_quarks(jet_eta, jet_phi, mc_pt,
+def match_jets_to_quarks(jet_eta, jet_phi,
                          mc_eta, mc_phi, mc_pdgid,
                          dr_threshold=0.4):
     """
@@ -77,6 +77,14 @@ def match_jets_to_quarks(jet_eta, jet_phi, mc_pt,
     # Set dR to a large value for unmatched jets
     jet_mcdr = ak.where(jet_ismatched, bestdR, 999.0)
 
-    matched_pt = ak.where(jet_ismatched, mc_pt[bestMatch], 10000.0)
+    return jet_flavour, jet_mcdr, jet_ismatched
 
-    return jet_flavour, jet_mcdr, jet_ismatched, matched_pt
+
+def match_jets_to_truthjets(jet_eta, jet_phi, truth_eta, truth_phi, truth_pt, dr_threshold = 0.4):
+    '''
+    BLalblblalaslba
+    '''
+    bestMatch, bestdR = match_obj1_to_obj2(jet_eta, jet_phi, truth_eta, truth_phi)
+    jet_ismatched = bestdR < dr_threshold
+    pt = ak.where(jet_ismatched, truth_pt[bestMatch], 10000.0)
+    return pt

@@ -32,10 +32,10 @@ fh_in=uproot.open(input_path)
 #
 # Read the reconstructed jets
 # Uproot can only load certain branches. Not clear why.
-keys=fh_in['BUVertices'].keys()
+keys=fh_in['JET_kt'].keys()
 keys.remove('evpro')
 keys.remove('vttyp')
-BUVertices=fh_in['BUVertices'].arrays(keys)
+JET_kt=fh_in['JET_kt'].arrays(keys)
 
 #
 # Read the truth particles
@@ -49,14 +49,21 @@ TrueJets = fh_in['TrueJets'].arrays(keys)
 
 #
 # Calculate jet kinematics
-BUVertices['jmot'] = kinematics.pt   (BUVertices['jmox'], BUVertices['jmoy'])
-BUVertices['jphi'] = kinematics.phi  (BUVertices['jmox'], BUVertices['jmoy'])
-BUVertices['jthe'] = kinematics.theta(BUVertices['jmot'], BUVertices['jmoz'])
-BUVertices['jeta'] = kinematics.eta  (BUVertices['jthe'])
+JET_kt['jmot'] = kinematics.pt   (JET_kt['jmox'], JET_kt['jmoy'])
+JET_kt['jphi'] = kinematics.phi  (JET_kt['jmox'], JET_kt['jmoy'])
+JET_kt['jthe'] = kinematics.theta(JET_kt['jmot'], JET_kt['jmoz'])
+JET_kt['jeta'] = kinematics.eta  (JET_kt['jthe'])
 
 #
 # Calculate truth jet kinematics
 TrueJets['jmot'] = kinematics.pt(TrueJets['jmox'], TrueJets['jmoy'])
+TrueJets['jphi'] = kinematics.phi(TrueJets['jmox'], TrueJets['jmoy']) 
+TrueJets['jthe'] = kinematics.theta(TrueJets['jmot'], TrueJets['jmoz'])
+TrueJets['jeta'] = kinematics.eta(TrueJets['jthe'])
+
+# print(len(JET_kt['jmot']))
+# print(len(TrueJets['jmot']))
+# print('-----------------------')
 
 #
 # List required branches
@@ -80,59 +87,73 @@ showerData['mcPhi'] = kinematics.phi(showerData['mcPx'], showerData['mcPy'])
 showerData['mcTheta'] = kinematics.theta(showerData['mcPt'], showerData['mcPz'])
 showerData['mcEta'] = kinematics.eta(showerData['mcTheta'])
 
+# print(len(JET_kt['jeta']))
+# print(len(JET_kt['jphi']))
+# print(len(showerData['mcEta']))
+# print(len(showerData['mcPhi']))
+# print(len(showerData['mcPDGID']))
+# print(len(TrueJets['jmot']))
+
 #
 # Match the jets to the truth particles
-BUVertices['jflv'], BUVertices['jmdr'], BUVertices['jism'], BUVertices['jtpt'] = match.match_jets_to_quarks(
-    jet_eta=BUVertices['jeta'],
-    jet_phi=BUVertices['jphi'],
+JET_kt['jflv'], JET_kt['jmdr'], JET_kt['jism'] = match.match_jets_to_quarks(
+    jet_eta=JET_kt['jeta'],
+    jet_phi=JET_kt['jphi'],
     mc_eta=showerData['mcEta'],
     mc_phi=showerData['mcPhi'],
     mc_pdgid=showerData['mcPDGID'],
-    mc_pt=TrueJets['jmot']
+    # mc_pt=showerData['mcPt']
+)
+
+JET_kt['jtpt'] = match.match_jets_to_truthjets(
+    jet_eta=JET_kt['jeta'],
+    jet_phi=JET_kt['jphi'],
+    truth_eta=TrueJets['jeta'],
+    truth_phi=TrueJets['jphi'],
+    truth_pt=TrueJets['jmot']
 )
 
 #
 # Handle the tracks
-BUVertices['daughters_trackQ'] = tracks.charge(BUVertices['daughters_trackOmega'])
-BUVertices['daughters_trackTheta'] = tracks.theta(BUVertices['daughters_trackTanLambda'])
-BUVertices['daughters_trackPt'] = tracks.pt(BUVertices['daughters_trackOmega'])
-BUVertices['daughters_trackEta'] = tracks.eta(BUVertices['daughters_trackTheta'])
-BUVertices['daughters_trackValid'] = tracks.valid(BUVertices['daughters_trackOmega'])
-BUVertices['daughters_trackPhiRel'] = tracks.phi_rel(BUVertices['jphi'], BUVertices['daughters_trackPhi'], BUVertices['daughters_trackValid'])
-BUVertices['daughters_trackEtaRel'] = tracks.eta_rel(BUVertices['jeta'], BUVertices['daughters_trackEta'], BUVertices['daughters_trackValid'])
-BUVertices['daughters_trackPtFrac'] = BUVertices['daughters_trackPt'] / BUVertices['jmot']
-BUVertices['daughters_trackdR'] = tracks.deltaR(BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackEtaRel'])
-BUVertices['daughters_track2DIP'] = tracks.signed_2d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
-BUVertices['daughters_track3DIP'] = tracks.signed_3d_ip(BUVertices['daughters_trackD0'], BUVertices['daughters_trackZ0'], BUVertices['daughters_trackSigmaD0'], BUVertices['daughters_trackSigmaZ0'], BUVertices['daughters_trackPhiRel'], BUVertices['daughters_trackValid'])
+JET_kt['daughters_trackQ'] = tracks.charge(JET_kt['daughters_trackOmega'])
+JET_kt['daughters_trackTheta'] = tracks.theta(JET_kt['daughters_trackTanLambda'])
+JET_kt['daughters_trackPt'] = tracks.pt(JET_kt['daughters_trackOmega'])
+JET_kt['daughters_trackEta'] = tracks.eta(JET_kt['daughters_trackTheta'])
+JET_kt['daughters_trackValid'] = tracks.valid(JET_kt['daughters_trackOmega'])
+JET_kt['daughters_trackPhiRel'] = tracks.phi_rel(JET_kt['jphi'], JET_kt['daughters_trackPhi'], JET_kt['daughters_trackValid'])
+JET_kt['daughters_trackEtaRel'] = tracks.eta_rel(JET_kt['jeta'], JET_kt['daughters_trackEta'], JET_kt['daughters_trackValid'])
+JET_kt['daughters_trackPtFrac'] = JET_kt['daughters_trackPt'] / JET_kt['jmot']
+JET_kt['daughters_trackdR'] = tracks.deltaR(JET_kt['daughters_trackPhiRel'], JET_kt['daughters_trackEtaRel'])
+JET_kt['daughters_track2DIP'] = tracks.signed_2d_ip(JET_kt['daughters_trackD0'], JET_kt['daughters_trackSigmaD0'], JET_kt['daughters_trackPhiRel'], JET_kt['daughters_trackValid'])
+JET_kt['daughters_track3DIP'] = tracks.signed_3d_ip(JET_kt['daughters_trackD0'], JET_kt['daughters_trackZ0'], JET_kt['daughters_trackSigmaD0'], JET_kt['daughters_trackSigmaZ0'], JET_kt['daughters_trackPhiRel'], JET_kt['daughters_trackValid'])
 
 #
 # Prepare the jets output structures
 jets = convert.convert_jets_to_numpy(
-    jet_truth_pt = BUVertices['jtpt'],
-    # jet_truth_pt = TrueJets['jmot'],
-    jet_pt = BUVertices['jmot'],
-    jet_eta = BUVertices['jeta'],
-    jet_phi = BUVertices['jphi'],
-    jet_energy = BUVertices['jene'],
-    jet_mass = BUVertices['jmas'],
-    jet_flavour = BUVertices['jflv'],
-    jet_dr = BUVertices['jmdr'],
-    jet_is_matched = BUVertices['jism']
+    jet_truth_pt = JET_kt['jtpt'],
+    jet_pt = JET_kt['jmot'],
+    jet_eta = JET_kt['jeta'],
+    jet_phi = JET_kt['jphi'],
+    jet_energy = JET_kt['jene'],
+    jet_mass = JET_kt['jmas'],
+    jet_flavour = JET_kt['jflv'],
+    jet_dr = JET_kt['jmdr'],
+    jet_is_matched = JET_kt['jism']
 )
 
 consts = convert.convert_consts_to_numpy(
-    track_valid = BUVertices['daughters_trackValid'],
-    track_charge = BUVertices['daughters_trackQ'],
-    track_d0 = BUVertices['daughters_trackD0'],
-    track_eta = BUVertices['daughters_trackEta'],
-    track_phi = BUVertices['daughters_trackPhi'],
-    track_eta_rel = BUVertices['daughters_trackEtaRel'],
-    track_phi_rel = BUVertices['daughters_trackPhiRel'],
-    track_pt_frac = BUVertices['daughters_trackPtFrac'],
-    track_dr = BUVertices['daughters_trackdR'],
-    track_z0 = BUVertices['daughters_trackZ0'],
-    track_signed_2d_ip = BUVertices['daughters_track2DIP'],
-    track_signed_3d_ip = BUVertices['daughters_track3DIP'],
+    track_valid = JET_kt['daughters_trackValid'],
+    track_charge = JET_kt['daughters_trackQ'],
+    track_d0 = JET_kt['daughters_trackD0'],
+    track_eta = JET_kt['daughters_trackEta'],
+    track_phi = JET_kt['daughters_trackPhi'],
+    track_eta_rel = JET_kt['daughters_trackEtaRel'],
+    track_phi_rel = JET_kt['daughters_trackPhiRel'],
+    track_pt_frac = JET_kt['daughters_trackPtFrac'],
+    track_dr = JET_kt['daughters_trackdR'],
+    track_z0 = JET_kt['daughters_trackZ0'],
+    track_signed_2d_ip = JET_kt['daughters_track2DIP'],
+    track_signed_3d_ip = JET_kt['daughters_track3DIP'],
 )
 
 #
