@@ -18,7 +18,7 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', type=str, help='Path to the input file')
 parser.add_argument('output_file', type=str, help='Path to the output file')
-parser.add_argument('shuffle', type=bool, help='Output file shuffled or not.')
+parser.add_argument('--shuffle', '-s', action='store_true', help='Output file shuffled or not.')
 
 args = parser.parse_args()
 
