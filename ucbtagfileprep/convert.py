@@ -14,6 +14,8 @@ def convert_jets_to_numpy(jet_truth_pt, jet_pt, jet_eta, jet_phi, jet_energy, je
 
     Parameters
     ----------
+    jet_truth_pt : awkward.Array
+        Transverse momentum of matched truth jet.
     jet_pt : awkward.Array
         Jet transverse momentum.
     jet_eta : awkward.Array
@@ -33,23 +35,23 @@ def convert_jets_to_numpy(jet_truth_pt, jet_pt, jet_eta, jet_phi, jet_energy, je
 
     Returns
     -------
-    numpy.ndarray
+    jet_data : numpy.ndarray
         A structured numpy array with jet information.
     """
 
     njet=ak.count(jet_pt)
 
     jet_data = np.empty(njet, dtype=schema.dtype_jets)
-    jet_data['truth_pt'] = ak.flatten(jet_truth_pt)
-    jet_data['pt'] = ak.flatten(jet_pt)
-    jet_data['eta'] = ak.flatten(jet_eta)
-    jet_data['phi'] = ak.flatten(jet_phi)
-    jet_data['energy'] = ak.flatten(jet_energy)
-    jet_data['mass'] = ak.flatten(jet_mass)
-    jet_data['flavour'] = ak.flatten(jet_flavour)
-    jet_data['flavour_label'] = flavour_labels_lut[jet_data['flavour']]
-    jet_data['dr'] = ak.flatten(jet_dr)
-    jet_data['is_matched'] = ak.flatten(jet_is_matched)
+    jet_data["truth_pt"] = ak.flatten(jet_truth_pt)
+    jet_data["pt"] = ak.flatten(jet_pt)
+    jet_data["eta"] = ak.flatten(jet_eta)
+    jet_data["phi"] = ak.flatten(jet_phi)
+    jet_data["energy"] = ak.flatten(jet_energy)
+    jet_data["mass"] = ak.flatten(jet_mass)
+    jet_data["flavour"] = ak.flatten(jet_flavour)
+    jet_data["flavour_label"] = flavour_labels_lut[jet_data["flavour"]]
+    jet_data["dr"] = ak.flatten(jet_dr)
+    jet_data["is_matched"] = ak.flatten(jet_is_matched)
 
     return jet_data
 
@@ -66,10 +68,28 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0, track_eta, trac
         Track charge.
     track_d0 : awkward.Array
         Track d0.
+    track_eta : awkward.Array
+        Track eta.
+    track_phi : awkward.Array
+        Track phi.
+    track_eta_rel : awkward.Array
+        Relative eta between track eta and jet eta.
+    track_phi_rel : awkward.Array
+        Relative phi between track phi and jet phi.
+    track_pt_frac : awkward.Array
+        Fraction of jet pT in track.
+    track_dr : awkward.Array
+        deltaR between jet and track.
+    track_z0 : awkward.Array
+        Track z0.
+    track_signed_2dip : awkward.Array
+        Track signed 2D impact parameter significance.
+    track_signed_3dip : awkward.Array
+        Track signed 3D impact parameter significance.
 
     Returns
     -------
-    numpy.ndarray
+    consts_data : numpy.ndarray
         A structured numpy array with consts information.
     """
 
@@ -77,17 +97,17 @@ def convert_consts_to_numpy(track_valid, track_charge, track_d0, track_eta, trac
     ntracks = np.sum(ak.num(track_valid, axis=1))
 
     consts_data = np.empty((ntracks, 200), dtype=schema.dtype_consts)
-    consts_data['valid'] = ak.flatten(track_valid, axis=1)
-    consts_data['charge'] = ak.flatten(track_charge, axis=1)
-    consts_data['d0'] = ak.flatten(track_d0, axis=1)
-    consts_data['eta'] = ak.flatten(track_eta, axis=1)
-    consts_data['phi'] = ak.flatten(track_phi, axis=1)
-    consts_data['eta_rel'] = ak.flatten(track_eta_rel, axis=1)
-    consts_data['phi_rel'] = ak.flatten(track_phi_rel, axis=1)
-    consts_data['pt_frac'] = ak.flatten(track_pt_frac, axis=1)
-    consts_data['dr'] = ak.flatten(track_dr, axis=1)
-    consts_data['z0'] = ak.flatten(track_z0, axis=1)
-    consts_data['signed_2d_ip'] = ak.flatten(track_signed_2d_ip, axis=1)
-    consts_data['signed_3d_ip'] = ak.flatten(track_signed_3d_ip, axis=1)
+    consts_data["valid"] = ak.flatten(track_valid, axis=1)
+    consts_data["charge"] = ak.flatten(track_charge, axis=1)
+    consts_data["d0"] = ak.flatten(track_d0, axis=1)
+    consts_data["eta"] = ak.flatten(track_eta, axis=1)
+    consts_data["phi"] = ak.flatten(track_phi, axis=1)
+    consts_data["eta_rel"] = ak.flatten(track_eta_rel, axis=1)
+    consts_data["phi_rel"] = ak.flatten(track_phi_rel, axis=1)
+    consts_data["pt_frac"] = ak.flatten(track_pt_frac, axis=1)
+    consts_data["dr"] = ak.flatten(track_dr, axis=1)
+    consts_data["z0"] = ak.flatten(track_z0, axis=1)
+    consts_data["signed_2d_ip"] = ak.flatten(track_signed_2d_ip, axis=1)
+    consts_data["signed_3d_ip"] = ak.flatten(track_signed_3d_ip, axis=1)
     
     return consts_data

@@ -1,8 +1,8 @@
 import numpy as np
 
-# Dataset 'jets'
+# Dataset "jets"
 dtype_jets = np.dtype([
-    ('truth_pt', np.float32),
+    ("truth_pt", np.float32),
     ("pt", np.float32),
     ("eta", np.float32),
     ("phi", np.float32),
@@ -14,18 +14,18 @@ dtype_jets = np.dtype([
     ("is_matched", np.bool_),
 ])
 
-# Dataset 'consts'
+# Dataset "consts"
 dtype_consts = np.dtype([
     ("valid", np.bool_),
     ("charge", np.int32),
     ("d0", np.float32),
-    ('eta', np.float32),
-    ('phi', np.float32),
-    ('eta_rel', np.float32),
-    ('phi_rel', np.float32),
-    ('pt_frac', np.float32),
-    ('dr', np.float32),
-    ('z0', np.float32),
-    ('signed_2d_ip', np.float32),
-    ('signed_3d_ip', np.float32),
+    ("eta", np.float32),
+    ("phi", np.float32),
+    ("eta_rel", np.float32),
+    ("phi_rel", np.float32),
+    ("pt_frac", np.float32),
+    ("dr", np.float32),
+    ("z0", np.float32),
+    ("signed_2d_ip", np.float32),
+    ("signed_3d_ip", np.float32),
 ])

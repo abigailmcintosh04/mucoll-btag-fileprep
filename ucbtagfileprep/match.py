@@ -81,10 +81,35 @@ def match_jets_to_quarks(jet_eta, jet_phi,
 
 
 def match_jets_to_truthjets(jet_eta, jet_phi, truth_eta, truth_phi, truth_pt, dr_threshold = 0.4):
-    '''
-    BLalblblalaslba
-    '''
+    """
+    Match jets to the closest truth jets using match_obj1_to_obj2.
+
+    Parameters
+    ----------
+    jet_eta : awkward.Array
+        Reco jet eta values
+    jet_phi : awkward.Array
+        Reco jet phi values
+    truth_eta : awkward.Array
+        Truth jet eta values
+    truth_phi : awkward.Array
+        Truth jet phi values
+    truth_pt : awkward.Array
+        Truth jet pt values
+    dr_threshold : float, optional
+        Maximum dR for a valid match (default: 0.4)
+
+    Returns
+    -------
+    pt : awkward.Array
+        The transverse momentum of the closest truth jet.
+    """
     bestMatch, bestdR = match_obj1_to_obj2(jet_eta, jet_phi, truth_eta, truth_phi)
+
+    # Checks if the match is within the dr threshold
     jet_ismatched = bestdR < dr_threshold
+
+    # Gets the transverse momentum of the matched truth jet.
+    # If the jet isn't matched, sets the pT to 10000.
     pt = ak.where(jet_ismatched, truth_pt[bestMatch], 10000.0)
     return pt

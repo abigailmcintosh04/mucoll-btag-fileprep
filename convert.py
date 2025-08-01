@@ -18,7 +18,7 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', type=str, help='Path to the input file')
 parser.add_argument('output_file', type=str, help='Path to the output file')
-parser.add_argument('--shuffle', '-s', action='store_true', help='Output file shuffled or not.')
+parser.add_argument('--shuffle', '-s', action='store_true', help='Output file shuffled or not')
 parser.add_argument('--keep_unmatched', '-k', action='store_true', help='Keep unmatched jets')
 
 args = parser.parse_args()
@@ -41,7 +41,7 @@ JET_kt=fh_in['JET_kt'].arrays(keys)
 
 #
 # Read the truth particles
-showerData = fh_in["showerData"]
+showerData = fh_in['showerData']
 
 #
 # Read the truth jets
@@ -51,10 +51,10 @@ TrueJets = fh_in['TrueJets'].arrays(keys)
 
 #
 # Calculate jet kinematics
-JET_kt['jmot'] = kinematics.pt   (JET_kt['jmox'], JET_kt['jmoy'])
-JET_kt['jphi'] = kinematics.phi  (JET_kt['jmox'], JET_kt['jmoy'])
+JET_kt['jmot'] = kinematics.pt(JET_kt['jmox'], JET_kt['jmoy'])
+JET_kt['jphi'] = kinematics.phi(JET_kt['jmox'], JET_kt['jmoy'])
 JET_kt['jthe'] = kinematics.theta(JET_kt['jmot'], JET_kt['jmoz'])
-JET_kt['jeta'] = kinematics.eta  (JET_kt['jthe'])
+JET_kt['jeta'] = kinematics.eta(JET_kt['jthe'])
 
 #
 # Calculate truth jet kinematics
@@ -63,13 +63,9 @@ TrueJets['jphi'] = kinematics.phi(TrueJets['jmox'], TrueJets['jmoy'])
 TrueJets['jthe'] = kinematics.theta(TrueJets['jmot'], TrueJets['jmoz'])
 TrueJets['jeta'] = kinematics.eta(TrueJets['jthe'])
 
-# print(len(JET_kt['jmot']))
-# print(len(TrueJets['jmot']))
-# print('-----------------------')
-
 #
 # List required branches
-branchsuffixes = ["mcPDGID", "mcE", "mcPx", "mcPy", "mcPz"]
+branchsuffixes = ['mcPDGID', 'mcE', 'mcPx', 'mcPy', 'mcPz']
 branches = [f'd1_{suffix}' for suffix in branchsuffixes]
 branches += [f'd2_{suffix}' for suffix in branchsuffixes]
 
@@ -89,13 +85,6 @@ showerData['mcPhi'] = kinematics.phi(showerData['mcPx'], showerData['mcPy'])
 showerData['mcTheta'] = kinematics.theta(showerData['mcPt'], showerData['mcPz'])
 showerData['mcEta'] = kinematics.eta(showerData['mcTheta'])
 
-# print(len(JET_kt['jeta']))
-# print(len(JET_kt['jphi']))
-# print(len(showerData['mcEta']))
-# print(len(showerData['mcPhi']))
-# print(len(showerData['mcPDGID']))
-# print(len(TrueJets['jmot']))
-
 #
 # Match the jets to the truth particles
 JET_kt['jflv'], JET_kt['jmdr'], JET_kt['jism'] = match.match_jets_to_quarks(
@@ -104,9 +93,10 @@ JET_kt['jflv'], JET_kt['jmdr'], JET_kt['jism'] = match.match_jets_to_quarks(
     mc_eta=showerData['mcEta'],
     mc_phi=showerData['mcPhi'],
     mc_pdgid=showerData['mcPDGID'],
-    # mc_pt=showerData['mcPt']
 )
 
+#
+# Match the reco jets to the truth jets.
 JET_kt['jtpt'] = match.match_jets_to_truthjets(
     jet_eta=JET_kt['jeta'],
     jet_phi=JET_kt['jphi'],
@@ -143,6 +133,8 @@ jets = convert.convert_jets_to_numpy(
     jet_is_matched = JET_kt['jism']
 )
 
+#
+# Prepare the tracks output structure.
 consts = convert.convert_consts_to_numpy(
     track_valid = JET_kt['daughters_trackValid'],
     track_charge = JET_kt['daughters_trackQ'],
@@ -159,7 +151,7 @@ consts = convert.convert_consts_to_numpy(
 )
 
 #
-# Save to an H5 file
+# Save to an H5 file. Shuffles entries and removes unmatched tracks, if options selected.
 
 with h5py.File(output_path, 'w') as fh_out:
     if not keep_unmatched:
