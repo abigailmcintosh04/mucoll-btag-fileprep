@@ -29,7 +29,7 @@ def match_obj1_to_obj2(
 
     # Get the index of the best match and store the corresponding dR
     bestMatch = ak.argmin(dr, axis=-1, keepdims=True)
-    bestdR = ak.min(dr, axis=-1)
+    bestdR = ak.min(dr, axis=-1, mask_identity=False)
 
     # Unflatten the last axis to match the indices with showerData
     bestMatch=ak.flatten(bestMatch, axis=-1)
