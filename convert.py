@@ -18,14 +18,14 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('input_file', type=str, help='Path to the input file')
 parser.add_argument('output_file', type=str, help='Path to the output file')
-parser.add_argument('--shuffle', '-s', action='store_true', help='Output file shuffled or not')
+parser.add_argument('--dont_shuffle', '-s', action='store_true', help='Don\'t shuffle output file')
 parser.add_argument('--keep_unmatched', '-k', action='store_true', help='Keep unmatched jets')
 
 args = parser.parse_args()
 
 input_path = args.input_file
 output_path = args.output_file
-shuffle = args.shuffle
+dont_shuffle = args.shuffle
 keep_unmatched = args.keep_unmatched
 
 # Read the input file
@@ -157,7 +157,7 @@ with h5py.File(output_path, 'w') as fh_out:
     if not keep_unmatched:
         valid_mask = jets['is_matched'] == True
         jets = jets[valid_mask]
-    if shuffle:
+    if not dont_shuffle:
         length = len(jets)
         indices = np.arange(0, length, 1)
         np.random.shuffle(indices)
