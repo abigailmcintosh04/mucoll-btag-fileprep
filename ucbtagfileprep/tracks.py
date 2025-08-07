@@ -103,7 +103,7 @@ def deltaR(phi_rel, eta_rel):
     return np.hypot(phi_rel, eta_rel)
 
 def signed_2d_ip(d_0, sigma_d_0, phi_rel, track_valid):
-    sign = np.sign(d_0 * np.sin(phi_rel))
+    sign = np.sign(np.sin(phi_rel))
     signed_ip = sign * np.abs(d_0 / sigma_d_0)
     signed_ip = ak.where(track_valid, signed_ip, 0)
     return signed_ip
@@ -111,7 +111,7 @@ def signed_2d_ip(d_0, sigma_d_0, phi_rel, track_valid):
 def signed_3d_ip(d_0, z_0, sigma_d0, sigma_z0, phi_rel, track_valid):
     a = np.hypot(d_0, z_0)
     sigma_a = np.hypot(sigma_d0, sigma_z0)
-    sign = np.sign(a * np.sin(phi_rel))
+    sign = np.sign(np.sin(phi_rel))
     signed_ip = sign * np.abs(a / sigma_a)
     signed_ip = ak.where(track_valid, signed_ip, 0)
     return signed_ip
