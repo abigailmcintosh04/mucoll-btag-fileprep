@@ -25,7 +25,7 @@ args = parser.parse_args()
 
 input_path = args.input_file
 output_path = args.output_file
-dont_shuffle = args.shuffle
+dont_shuffle = args.dont_shuffle
 keep_unmatched = args.keep_unmatched
 
 # Read the input file
